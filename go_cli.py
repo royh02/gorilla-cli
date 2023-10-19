@@ -164,9 +164,8 @@ def format_command(input_str):
     Standardize commands to be stored with a newline
     character in the history
     """
-    if not input_str.endswith('\n'):
-        input_str += '\n'
-    return input_str
+    ## TODO: FIX the concatenating history issue
+    return input_str.rstrip('\n') + '\n'
 
 def append_string_to_file_if_missing(file_path, target_string):
     """
@@ -235,6 +234,7 @@ def main():
 
     if args.history:
         commands = get_history_commands(HISTORY_FILE)
+        print(commands)
     else:
         with Halo(text=f"{GORILLA_EMOJI}Loading", spinner="dots"):
             try:
@@ -248,6 +248,7 @@ def main():
                     f"{SERVER_URL}/commands_v2", json=data_json, timeout=30
                 )
                 commands = response.json()
+                print(commands)
             except requests.exceptions.RequestException as e:
                 print("Server is unreachable.")
                 print("Try updating Gorilla-CLI with 'pip install --upgrade gorilla-cli'")
